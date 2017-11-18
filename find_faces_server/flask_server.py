@@ -1,4 +1,3 @@
-import requests
 import io
 from flask import Flask, request, jsonify
 import base64
@@ -12,14 +11,19 @@ app = Flask(__name__)
 def find_face():
 
     """
-    Finds face coords
-    :param img: image (png or jpg)
+    Finds face coords. Takes img(string of base64) from request params
     :return: face coords
     """
+    # Get image from params
     img = request.form.get('img', False)
+
+    # Convert image from string to base64
     base64_img = base64.b64decode(img)
     if img:
+        # Find locations
         face_locations = utils.get_face_coordinates(io.BytesIO(base64_img))
+
+        # Return json
         return jsonify(coordinates=face_locations)
     else:
         return "400"

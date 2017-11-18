@@ -1,4 +1,6 @@
 window.onload = function () {
+
+    // Find canvas
     var c=document.getElementById("face_square");
     var ctx=c.getContext("2d");
 
@@ -6,7 +8,6 @@ window.onload = function () {
     var coors = coordinates;
     c.height = coors[0][2] + coors[0][0];
     c.width = coors[0][3] + coors[0][1];
-    // ctx.rect(coors[0][0],coors[0][0],coors[0][2]-coors[0][0],coors[0][3]-coors[0][1]);
 
     var x = coors[0][3];
     var y = coors[0][0];

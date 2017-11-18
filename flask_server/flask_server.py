@@ -1,5 +1,4 @@
 import requests
-import io
 import base64
 import json
 from flask import Flask, render_template
@@ -18,12 +17,20 @@ def hello_world():
 @app.route('/find_face')
 def find_face():
     img_url = IMG_URL
+    # Get image
     img = requests.get(img_url).content
 
+    # Get coords from server-helper. Sends img in base64 string
     response = requests.post(FIND_FACES_SERVER_URL,
                              data={'img': base64.b64encode(img)})
+
+    # Get json response
     json_data = json.loads(response.text)
+
+    # Parse json
     face_locations = json_data.get('coordinates', [])
+
+    # Render template
     return render_template('find_face_template.html',
                            img=img_url,
                            coordinates=face_locations)
