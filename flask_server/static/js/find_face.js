@@ -13,9 +13,10 @@ window.onload = function () {
 
     var height = coors[0][2] - coors[0][0];
     var width = coors[0][1] - coors[0][3];
+
+    ctx.strokeStyle="#FF0000";
     ctx.rect(x, y, width, height);
 
-    ctx.rect(x, y, width, height);
     ctx.stroke();
 };
 
