@@ -1,0 +1,16 @@
+body{
+    background: #f2f6f8;
+}
+
+img{
+    z-index:1;
+}
+
+#face_square{
+    position:absolute;
+    z-index:20;
+}
+
+.coordinates{
+    display: block;
+}
