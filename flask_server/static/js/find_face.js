@@ -1,9 +1,6 @@
 window.onload = function () {
-    var example = document.getElementById("coordinates");
-    ctx = example.getContext('2d');
-    pic = new Image();
-    pic.src = img_url;
-    pic.onload = function () {
-        ctx.drawImage(pic, 0, 0);
-    };
+    var c=document.getElementById("coordinates");
+    var ctx=c.getContext("2d");
+    ctx.rect(20,20,150,100);
+    ctx.stroke();
 };
