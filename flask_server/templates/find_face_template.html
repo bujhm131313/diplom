@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <script type="text/javascript">
+            var img_url = {{ img|tojson }};
+    </script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/find_face.js') }}"></script>
     <title>Face coordinates</title>
 
