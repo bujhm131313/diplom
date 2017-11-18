@@ -6,6 +6,9 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
+FIND_FACES_SERVER_URL = 'http://localhost:5000/find_face'
+IMG_URL = "http://localhost:8000/igor-1.jpg"
+
 
 @app.route('/')
 def hello_world():
@@ -14,10 +17,10 @@ def hello_world():
 
 @app.route('/find_face')
 def find_face():
-    img_url = "http://localhost:8000/igor-1.jpg"
+    img_url = IMG_URL
     img = requests.get(img_url).content
 
-    response = requests.post('http://localhost:5000/find_face',
+    response = requests.post(FIND_FACES_SERVER_URL,
                              data={'img': base64.b64encode(img)})
     json_data = json.loads(response.text)
     face_locations = json_data.get('coordinates', [])
