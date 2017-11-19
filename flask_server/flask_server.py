@@ -16,6 +16,11 @@ def hello_world():
 
 @app.route('/find_face')
 def find_face():
+    return render_template('find_face_post.html')
+
+
+@app.route('/find_face_post', methods=['POST'])
+def find_face_post():
     img_url = IMG_URL
     # Get image
     img = requests.get(img_url).content
