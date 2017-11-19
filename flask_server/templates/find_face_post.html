@@ -1,13 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Post your image</title>
-</head>
-<body>
+{% extends "layout.html" %}
+{% block body %}
     <form action="/find_face_post" method="post" enctype="multipart/form-data">
         <input type="file" name="file">
         <input type="submit">Submit</input>
     </form>
-</body>
-</html>
+{% endblock %}
