@@ -12,7 +12,7 @@
 </head>
 <body>
     <canvas id='face_square'>Обновите браузер</canvas>
-    <img src="{{ img }}" />
+    <img src="{{ url_for('download_file', filename=image) }}" />
     <div class="coordinates">
         {{ coordinates }}
     </div>
