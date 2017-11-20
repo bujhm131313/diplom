@@ -1,0 +1,157 @@
+swagger: '2.0'
+info:
+  description: API for face detection and recognition
+  version: "1.0.0"
+  title: FaceAPI
+
+paths:
+  /detect:
+    post:
+      summary: Detect face on image
+      description: |
+        Takes a photo and returns the rectangular around detected face.
+      operationId: detect
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: image
+        description: Image to upload
+        schema:
+          $ref: '#/definitions/Image'
+      responses:
+        200:
+          description: Detected Face
+          schema:
+            $ref: '#/definitions/DetectedFace'
+            
+  /add_face:
+    post:
+      summary: Add face
+      description: |
+        Takes a photo, finds the faces within it, 
+        and stores the faces into a gallery you create.
+      operationId: add_face
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: image
+        description: Image to upload
+        schema:
+          $ref: '#/definitions/Image'
+      responses:
+        200:
+          description: OK
+          
+  /verify:
+    post:
+      summary: Verify face
+      description: |
+        Takes a photo, finds the face within it, 
+        and tries to compare it against a face you have already enrolled into a gallery.
+      operationId: verify
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: image
+        description: Image to upload
+        schema:
+          $ref: '#/definitions/Image'
+      responses:
+        200:
+          description: Verified face
+          schema:
+            $ref: '#/definitions/Face'
+            
+  /recognize:
+    post:
+      summary: Recognize face
+      description: |
+        Takes a photo, finds the faces within it, 
+        and tries to match them against the faces you have already added into a gallery.
+      operationId: recognize
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: image
+        description: Image to upload
+        schema:
+          $ref: '#/definitions/RecognizeImage'
+      responses:
+        200:
+          description: Possible candidates
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Face'     
+
+definitions:
+  Image:
+    type: object
+    properties:
+      image:
+        type: string
+        description: Publicly accessible URL, file upload or Base64 encoded photo.
+      subject_id:
+        type: string
+        description: Defined by you. Is used as an identifier for the face.
+      gallery_name:
+        type: string
+        description: Defined by you. Is used to identify the gallery.
+  RecognizeImage:
+    type: object
+    properties:
+      image:
+        type: string
+        description: Publicly accessible URL, file upload or Base64 encoded photo.
+      gallery_name:
+        type: string
+        description: Defined by you. Is used to identify the gallery.        
+  Face:
+    type: object
+    properties:
+      subject_id: 
+        type: string
+        description: Face identifier
+      gallery_name:
+        type: string
+        description: Gallery name
+      confidence:
+        type: integer
+        description: Recognition confidence
+      width:
+        type: integer
+      height:
+        type: integer
+      topLeftX:
+        type: integer
+      topLeftY:
+        type: integer
+        
+  DetectedFace:
+    type: object
+    properties:
+      width:
+        type: integer
+      height:
+        type: integer
+      topLeftX:
+        type: integer
+      topLeftY:
+        type: integer
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /faceapi/FaceAPI/1.0.0
+schemes:
+ - https
