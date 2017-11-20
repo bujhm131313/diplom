@@ -7,9 +7,24 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-FIND_FACES_SERVER_URL = 'http://localhost:5000/find_face'
+FIND_FACES_SERVER_URL = 'https://localhost:8443/apiman-gateway/FaceAPI/faceapi/v1/'
 IMG_URL = "http://localhost:8000/igor-1.jpg"
 UPLOAD_FOLDER = './uploads'
+
+
+def authorize():
+    token = requests.post(
+        'http://127.0.0.1:8080/auth/realms/faceapi/protocol/openid-connect/token',
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"},
+        data={
+            'username': 'faceapiuser',
+            'password': 'faceapiuser',
+            'grant_type': 'password',
+            'client_id': 'apiman',
+        })
+    json_web_token = token.json().get('access_token', False)
+    return json_web_token
 
 
 @app.route('/')
@@ -44,7 +59,12 @@ def find_face_post():
 
         base64_img = base64.b64encode(img.read())
         # Get coords from server-helper. Sends img in base64 string
-        response = requests.post(FIND_FACES_SERVER_URL,
+
+        json_web_token = authorize()
+        response = requests.post(FIND_FACES_SERVER_URL + 'find_face',
+                                 verify=False,
+                                 headers={'Authorization': 'Bearer {}'.format(
+                                     json_web_token)},
                                  data={'img': base64_img})
 
         # Get json response
