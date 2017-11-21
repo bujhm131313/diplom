@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
+VERIFY_FACES_SERVER_URL = 'http://localhost:5000/verify_face'
 FIND_FACES_SERVER_URL = 'https://localhost:8443/apiman-gateway/FaceAPI/faceapi/v1/'
 IMG_URL = "http://localhost:8000/igor-1.jpg"
 UPLOAD_FOLDER = './uploads'
@@ -35,6 +36,11 @@ def hello_world():
 @app.route('/find_face')
 def find_face():
     return render_template('find_face_post.html')
+
+
+@app.route('/verify_face')
+def verify_face():
+    return render_template('verify_face_post.html')
 
 
 @app.route('/uploads/<path:filename>')
@@ -77,6 +83,30 @@ def find_face_post():
         return render_template('find_face_template.html',
                                image=filename,
                                coordinates=face_locations)
+    else:
+        return "Upload img, plz"
+
+
+@app.route('/verify_face_post', methods=['POST'])
+def verify_face_post():
+
+    known_img = request.files.get('known_img', False)
+    unknown_img = request.files.get('unknown_img', False)
+
+    if known_img and unknown_img:
+
+        base64_known_img = base64.b64encode(known_img.read())
+        base64_unknown_img = base64.b64encode(unknown_img .read())
+
+        # json_web_token = authorize()
+        response = requests.post(VERIFY_FACES_SERVER_URL,
+                                 verify=False,
+                                 data={'known_img': base64_known_img,
+                                       'unknown_img': base64_unknown_img
+                                       })
+
+        return render_template('verify_face_template.html',
+                               result=response.content.decode('utf-8') == 'True')
     else:
         return "Upload img, plz"
 
