@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 {% extends "layout.html" %}
 {% block body %}
-    <form action="/find_face_post" method="post" enctype="multipart/form-data">
-        <input type="file" name="file">
-        <input type="submit">Submit</input>
-    </form>
+    <div class="center">
+        <div><h1>Детектирование лица</h1></div>
+        <img src="/static/img/aim.png" style="height: 300px"/>
+        <form action="/find_face_post" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" value="Изображение" />
+            <input type="submit" value="Найти!" />
+        </form>
+    </div>
 {% endblock %}
