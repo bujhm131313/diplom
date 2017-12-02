@@ -24,5 +24,11 @@
         </ul>
     </nav>
 </div>
-{% block body %}{% endblock %}
+{% block body %}
+    <div class="center">
+        <div><h1>Вы успешно авторизованы!</h1></div>
+        <img src="/static/img/done.png" style="height: 300px"/>
+        <div><h2><a href="/logout">Выйти</a></h2></div>
+    </div>
+{% endblock %}
 </html>

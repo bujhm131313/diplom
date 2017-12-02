@@ -75,29 +75,11 @@ def hello_me():
     email = info.get('email')
     user_id = info.get('sub')
 
-    if user_id in oidc.credentials_store:
-        try:
-            from oauth2client.client import OAuth2Credentials
-            access_token = OAuth2Credentials.from_json(
-                oidc.credentials_store[user_id]).access_token
-            print
-            'access_token=<%s>' % access_token
-            headers = {'Authorization': 'Bearer %s' % (access_token)}
-            greeting = 'Authorized'
-        except:
-            print
-            "Could not access greeting-service"
-            greeting = "Hello %s" % username
-
-    return ("""%s your email is %s and your user_id is %s!
-               <ul>
-                 <li><a href="/">Home</a></li>
-                 <li><a href="//localhost:8081/auth/realms/pysaar/account?referrer=flask-app&referrer_uri=http://localhost:5000/private&">Account</a></li>
-                </ul>""" %
-            (greeting, email, user_id))
+    return render_template('layout.html')
 
 
 @app.route('/find_face')
+@oidc.require_login
 def find_face():
     return render_template('find_face_post.html')
 
