@@ -1,9 +1,17 @@
 <!DOCTYPE html>
 {% extends "layout.html" %}
 {% block body %}
-    <form action="/verify_face_post" method="post" enctype="multipart/form-data">
-        <input name="known_img" type="file">
-        <input name="unknown_img" type="file">
-        <input type="submit">Submit</input>
-    </form>
+    <div class="center">
+        <div><h1>Детектирование лица</h1></div>
+        <img src="/static/img/mirror.png" style="height: 300px"/>
+        <form action="/verify_face_post" method="post" enctype="multipart/form-data">
+            <br>
+            <div>
+                <input name="known_img" type="file" value="Первое фоток" />
+                <input name="unknown_img" type="file" value="Второе фото" />
+            </div>
+            <br>
+            <input type="submit" value="Сравнить!" />
+        </form>
+    </div>
 {% endblock %}
