@@ -15,7 +15,7 @@ app.config.update({
     'OIDC_ID_TOKEN_COOKIE_SECURE': False,
     'OIDC_REQUIRE_VERIFIED_EMAIL': False,
     'OIDC_USER_INFO_ENABLED': True,
-    'OIDC_OPENID_REALM': 'flask-demo',
+    'OIDC_OPENID_REALM': 'faceapi',
     'OIDC_SCOPES': ['openid', 'email', 'profile'],
     'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post'
 })
@@ -54,6 +54,14 @@ def hello_world():
         return 'Welcome anonymous, <a href="/private">Log in</a>'
 
 
+@app.route('/logout')
+def logout():
+    """Performs local logout by removing the session cookie."""
+
+    oidc.logout()
+    return 'Hi, you have been logged out! <a href="/">Return</a>'
+
+
 @app.route('/private')
 @oidc.require_login
 def hello_me():
@@ -75,9 +83,7 @@ def hello_me():
             print
             'access_token=<%s>' % access_token
             headers = {'Authorization': 'Bearer %s' % (access_token)}
-            # YOLO
-            greeting = requests.get('http://localhost:8080/greeting',
-                                    headers=headers).text
+            greeting = 'Authorized'
         except:
             print
             "Could not access greeting-service"
