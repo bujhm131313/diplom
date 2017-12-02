@@ -51,7 +51,7 @@ def hello_world():
                 '<a href="/logout">Log out</a>') % \
                oidc.user_getfield('preferred_username')
     else:
-        return 'Welcome anonymous, <a href="/private">Log in</a>'
+        return render_template('unauthorized_layout.html')
 
 
 @app.route('/logout')

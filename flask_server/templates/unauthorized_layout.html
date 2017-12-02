@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+{% block head %}
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+    <script src="https://npmcdn.com/bootstrap@4.0.0-alpha.5/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/find_face.css') }}">
+{% endblock %}
+<div class="header-content">
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+        <ul class="navbar-nav mr-auto">
+        </ul>
+    </nav>
+</div>
+{% block body %}
+    <div class="center">
+        <div><h1>Пожалуйста, авторизируйтесь</h1></div>
+        <img src="/static/img/shield.png" style="height: 300px"/>
+        <div><h2><a href="/private">Войти</a></h2></div>
+    </div>
+{% endblock %}
+</html>
