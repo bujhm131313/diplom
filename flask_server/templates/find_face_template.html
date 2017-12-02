@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+<html lang="en">
+{% block head %}
+    {{ super() }}
+    <meta charset="UTF-8">
+    <script type="text/javascript">
+        var coordinates = {{ coordinates|tojson }};
+    </script>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/find_face.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/find_face.js') }}"></script>
+    <title>Face coordinates</title>
+{% endblock %}
+{% block body %}
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('hello_world') }}">Hello World</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('find_face') }}">Find Face</a>
+            </li>
+        </ul>
+    </nav>
+    <canvas id='face_square'>Обновите браузер</canvas>
+    <img src="{{ url_for('download_file', filename=image) }}" />
+    <div class="coordinates">
+        {{ coordinates }}
+    </div>
+{% endblock %}
+</html>

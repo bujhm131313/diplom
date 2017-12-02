@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block body %}
+    <form action="/find_face_post" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit">Submit</input>
+    </form>
+{% endblock %}

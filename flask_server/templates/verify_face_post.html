@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block body %}
+    <form action="/verify_face_post" method="post" enctype="multipart/form-data">
+        <input name="known_img" type="file">
+        <input name="unknown_img" type="file">
+        <input type="submit">Submit</input>
+    </form>
+{% endblock %}

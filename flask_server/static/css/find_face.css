@@ -1,0 +1,25 @@
+body{
+    background: #f2f6f8;
+    margin-top: 100px;
+}
+
+img{
+    z-index:1;
+}
+
+#face_square{
+    position:absolute;
+    z-index:20;
+}
+
+.coordinates{
+    display: block;
+}
+
+.center{
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    text-align: center;
+}
