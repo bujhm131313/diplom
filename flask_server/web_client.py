@@ -2,7 +2,8 @@ import requests
 import base64
 import json
 import os
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory,\
+    redirect
 from flask_oidc import OpenIDConnect
 from werkzeug.utils import secure_filename
 
@@ -47,9 +48,7 @@ def authorize():
 @app.route('/')
 def hello_world():
     if oidc.user_loggedin:
-        return ('Hello, %s, <a href="/private">See private</a> '
-                '<a href="/logout">Log out</a>') % \
-               oidc.user_getfield('preferred_username')
+        return redirect('/private')
     else:
         return render_template('unauthorized_layout.html')
 
@@ -59,7 +58,7 @@ def logout():
     """Performs local logout by removing the session cookie."""
 
     oidc.logout()
-    return 'Hi, you have been logged out! <a href="/">Return</a>'
+    return render_template('logout.html')
 
 
 @app.route('/private')
