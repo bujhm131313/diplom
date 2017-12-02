@@ -2,10 +2,27 @@ import requests
 import base64
 import json
 import os
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory,\
+    redirect
+from flask_oidc import OpenIDConnect
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+app.config.update({
+    'SECRET_KEY': 'SomethingNotEntirelySecret',
+    'TESTING': True,
+    'DEBUG': True,
+    'OIDC_CLIENT_SECRETS': 'client_secrets.json',
+    'OIDC_ID_TOKEN_COOKIE_SECURE': False,
+    'OIDC_REQUIRE_VERIFIED_EMAIL': False,
+    'OIDC_USER_INFO_ENABLED': True,
+    'OIDC_OPENID_REALM': 'faceapi',
+    'OIDC_SCOPES': ['openid', 'email', 'profile'],
+    'OIDC_INTROSPECTION_AUTH_METHOD': 'client_secret_post'
+})
+
+oidc = OpenIDConnect(app)
+
 
 VERIFY_FACES_SERVER_URL = 'http://localhost:5000/verify_face'
 FIND_FACES_SERVER_URL = 'https://localhost:8443/apiman-gateway/FaceAPI/faceapi/v1/'
@@ -23,6 +40,7 @@ def authorize():
             'password': 'faceapiuser',
             'grant_type': 'password',
             'client_id': 'apiman',
+            'client_secret': '7d60d97e-ca80-4c3e-b202-c16c1a0eec5c',
         })
     json_web_token = token.json().get('access_token', False)
     return json_web_token
@@ -30,10 +48,38 @@ def authorize():
 
 @app.route('/')
 def hello_world():
+    if oidc.user_loggedin:
+        return redirect('/private')
+    else:
+        return render_template('unauthorized_layout.html')
+
+
+@app.route('/logout')
+def logout():
+    """Performs local logout by removing the session cookie."""
+
+    oidc.logout()
+    return render_template('logout.html')
+
+
+@app.route('/private')
+@oidc.require_login
+def hello_me():
+    """Example for protected endpoint that extracts private information from the OpenID Connect id_token.
+       Uses the accompanied access_token to access a backend service.
+    """
+
+    info = oidc.user_getinfo(['preferred_username', 'email', 'sub'])
+
+    username = info.get('preferred_username')
+    email = info.get('email')
+    user_id = info.get('sub')
+
     return render_template('layout.html')
 
 
 @app.route('/find_face')
+@oidc.require_login
 def find_face():
     return render_template('find_face_post.html')
 
