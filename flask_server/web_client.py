@@ -40,6 +40,7 @@ def authorize():
             'password': 'faceapiuser',
             'grant_type': 'password',
             'client_id': 'apiman',
+            'client_secret': '7d60d97e-ca80-4c3e-b202-c16c1a0eec5c',
         })
     json_web_token = token.json().get('access_token', False)
     return json_web_token
