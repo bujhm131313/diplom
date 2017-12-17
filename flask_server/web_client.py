@@ -181,7 +181,9 @@ def identify_face_post():
         base64_known_img = base64.b64encode(known_img.read())
 
         filenames = {'Игорь Курилко': 'igor-1.jpg',
-                     'Егор Скрипник': 'egor-1.jpg'}
+                     'Егор Скрипник': 'egor-1.jpg',
+                     'Николай Цуцарин': 'photo_2017-12-17_16-45-54.jpg',
+                     }
 
         for key, filename in filenames.items():
             file_path = os.path.join(UPLOAD_FOLDER, filename)
