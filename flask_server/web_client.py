@@ -89,6 +89,11 @@ def verify_face():
     return render_template('verify_face_post.html')
 
 
+@app.route('/identify_face')
+def identify_face():
+    return render_template('identify_face_post.html')
+
+
 @app.route('/uploads/<path:filename>')
 def download_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+{% block body %}
+    <div class="center">
+        <div><h1>Идентификация</h1></div>
+        <img src="/static/img/mirror.png" style="height: 300px"/>
+        <form action="/identify_face_post" method="post" enctype="multipart/form-data">
+            <br>
+            <div>
+                <input name="known_img" type="file" value="Фото" />
+            </div>
+            <br>
+            <input type="submit" value="Распознать!" />
+        </form>
+    </div>
+{% endblock %}
