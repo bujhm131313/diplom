@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, send_from_directory,\
     redirect
 from flask_oidc import OpenIDConnect
 from werkzeug.utils import secure_filename
+from PIL import Image
 
 app = Flask(__name__)
 app.config.update({
@@ -89,6 +90,11 @@ def verify_face():
     return render_template('verify_face_post.html')
 
 
+@app.route('/identify_face')
+def identify_face():
+    return render_template('identify_face_post.html')
+
+
 @app.route('/uploads/<path:filename>')
 def download_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename, as_attachment=True)
@@ -155,6 +161,51 @@ def verify_face_post():
                                result=response.content.decode('utf-8') == 'True')
     else:
         return "Upload img, plz"
+
+
+@app.route('/identify_face_post', methods=['POST'])
+def identify_face_post():
+
+    known_img = request.files.get('known_img', False)
+    identify_face_result = 'Совпадений не найдено'
+
+    if known_img:
+        filename = secure_filename(known_img.filename)
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        known_img.save(file_path)
+
+        # It's kinda strange, but there is a pointer in image reader and we
+        # need to point it to the start again after previous reading
+        known_img.seek(0)
+
+        base64_known_img = base64.b64encode(known_img.read())
+
+        filenames = {'Игорь Курилко': 'igor-1.jpg',
+                     'Егор Скрипник': 'egor-1.jpg',
+                     'Николай Цуцарин': 'photo_2017-12-17_16-45-54.jpg',
+                     }
+
+        for key, filename in filenames.items():
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+
+            # unknown_img = Image.open(file_path)
+            with open(file_path, "rb") as imageFile:
+                f = imageFile.read()
+                unknown_img = base64.b64encode(f)
+
+            response = requests.post(VERIFY_FACES_SERVER_URL,
+                                     verify=False,
+                                     data={'known_img': base64_known_img,
+                                           'unknown_img': unknown_img
+                                           })
+
+            if response.content.decode('utf-8') == 'True':
+                identify_face_result = key
+                break
+
+        return render_template('identify_face.html',
+                               result=identify_face_result,
+                               image=known_img.filename)
 
 
 if __name__ == '__main__':
