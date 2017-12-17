@@ -167,8 +167,17 @@ def verify_face_post():
 def identify_face_post():
 
     known_img = request.files.get('known_img', False)
+    identify_face_result = 'Совпадений не найдено'
 
     if known_img:
+        filename = secure_filename(known_img.filename)
+        file_path = os.path.join(UPLOAD_FOLDER, filename)
+        known_img.save(file_path)
+
+        # It's kinda strange, but there is a pointer in image reader and we
+        # need to point it to the start again after previous reading
+        known_img.seek(0)
+
         base64_known_img = base64.b64encode(known_img.read())
 
         filenames = {'Игорь Курилко': 'igor-1.jpg',
@@ -189,9 +198,12 @@ def identify_face_post():
                                            })
 
             if response.content.decode('utf-8') == 'True':
-                return key
+                identify_face_result = key
+                break
 
-        return 'No mathces found'
+        return render_template('identify_face.html',
+                               result=identify_face_result,
+                               image=known_img.filename)
 
 
 if __name__ == '__main__':

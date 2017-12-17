@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends "layout.html" %}
+<html lang="en">
+{% block head %}
+    {{ super() }}
+    <meta charset="UTF-8">
+    <title>Результат</title>
+{% endblock %}
+{% block body %}
+    <div class="center">
+        <h1>Результат идентификации:</h1>
+        <h2>{{ result }}</h2>
+
+        <img class="center" style="height: 200px;" src="{{ url_for('download_file', filename=image) }}" />
+
+    </div>
+{% endblock %}
+</html>
