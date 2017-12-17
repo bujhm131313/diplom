@@ -7,6 +7,7 @@ from flask import Flask, render_template, request, send_from_directory,\
 from flask_oidc import OpenIDConnect
 from werkzeug.utils import secure_filename
 from PIL import Image
+from gallery import gallery
 
 app = Flask(__name__)
 app.config.update({
@@ -206,6 +207,17 @@ def identify_face_post():
         return render_template('identify_face.html',
                                result=identify_face_result,
                                image=known_img.filename)
+
+@app.route('/gallery', methods=['GET'])
+def show_gallery():
+    photos = gallery.gallery_get_all()
+    photos_b64 = []
+    for photo in photos:
+        photo_b64 = base64.b64encode(photo.getvalue()).decode()
+        photos_b64.append(photo_b64)
+
+    return render_template('images.html', images=photos_b64)
+
 
 
 if __name__ == '__main__':

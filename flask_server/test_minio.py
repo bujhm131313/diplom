@@ -1,9 +1,10 @@
 import os
 import base64
 import io
-from flask import Flask, request, redirect, url_for, flash, send_file
+from flask import Flask, request, redirect, url_for, flash, send_file, render_template
 from werkzeug.utils import secure_filename
-from gallery import *
+# from gallery import *
+from gallery import gallery
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
@@ -12,6 +13,16 @@ app = Flask(__name__)
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/gallery', methods=['GET'])
+def show_gallery():
+    photos = gallery.gallery_get_all()
+    photos_b64 = []
+    for photo in photos:
+        photo_b64 = base64.b64encode(photo.getvalue()).decode()
+        photos_b64.append(photo_b64)
+
+    return render_template('images.html', images=photos_b64)
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
