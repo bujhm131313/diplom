@@ -171,9 +171,10 @@ def identify_face_post():
     if known_img:
         base64_known_img = base64.b64encode(known_img.read())
 
-        filenames = ['igor-1.jpg', 'egor-1.jpg']
+        filenames = {'Игорь Курилко': 'igor-1.jpg',
+                     'Егор Скрипник': 'egor-1.jpg'}
 
-        for filename in filenames:
+        for key, filename in filenames.items():
             file_path = os.path.join(UPLOAD_FOLDER, filename)
 
             # unknown_img = Image.open(file_path)
@@ -188,7 +189,7 @@ def identify_face_post():
                                            })
 
             if response.content.decode('utf-8') == 'True':
-                return filename
+                return key
 
         return 'No mathces found'
 
