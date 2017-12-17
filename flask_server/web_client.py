@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, send_from_directory,\
     redirect
 from flask_oidc import OpenIDConnect
 from werkzeug.utils import secure_filename
+from PIL import Image
 
 app = Flask(__name__)
 app.config.update({
@@ -160,6 +161,36 @@ def verify_face_post():
                                result=response.content.decode('utf-8') == 'True')
     else:
         return "Upload img, plz"
+
+
+@app.route('/identify_face_post', methods=['POST'])
+def identify_face_post():
+
+    known_img = request.files.get('known_img', False)
+
+    if known_img:
+        base64_known_img = base64.b64encode(known_img.read())
+
+        filenames = ['igor-1.jpg', 'egor-1.jpg']
+
+        for filename in filenames:
+            file_path = os.path.join(UPLOAD_FOLDER, filename)
+
+            # unknown_img = Image.open(file_path)
+            with open(file_path, "rb") as imageFile:
+                f = imageFile.read()
+                unknown_img = base64.b64encode(f)
+
+            response = requests.post(VERIFY_FACES_SERVER_URL,
+                                     verify=False,
+                                     data={'known_img': base64_known_img,
+                                           'unknown_img': unknown_img
+                                           })
+
+            if response.content.decode('utf-8') == 'True':
+                return filename
+
+        return 'No mathces found'
 
 
 if __name__ == '__main__':
