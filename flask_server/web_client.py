@@ -157,8 +157,12 @@ def verify_face_post():
                                        'unknown_img': base64_unknown_img
                                        })
 
+        if response.content.decode('utf-8') == 'True':
+            text = 'Один человек'
+        else:
+            text = 'Разные люди'
         return render_template('verify_face_template.html',
-                               result=response.content.decode('utf-8') == 'True')
+                               result=text)
     else:
         return "Upload img, plz"
 
