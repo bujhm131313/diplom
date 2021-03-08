@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+    <body>
+        {% for image in images %}
+            <img src="data:image/png;base64,{{ image }}" style="width: 256px; height: 256px" />
+        {% endfor %}
+    </body>
+</html>
